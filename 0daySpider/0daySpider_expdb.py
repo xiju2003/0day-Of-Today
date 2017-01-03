@@ -126,9 +126,6 @@ def main(argv):
    if date == '' or date == '-t' or date == '-d':
        date = str(time.strftime("%Y-%m-%d", time.localtime()))
        print '\nuse default date:today'
-   if type == '' or type == '-t' or type == '-d':
-       type = 'web'
-       print 'use default type:web'
    get_vuls(date,type)
 
 if __name__ == "__main__":
