@@ -18,21 +18,17 @@ def get_vuls(date,type):
                'Connection': 'keep-alive',
                'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.95 Safari/537.36'
     }
-    s = requests.Session()
-    s.headers.update(headers)
-
+   
     baseUrl ='https://www.exploit-db.com/'
 
     if type == 'web':
-        source = s.get(baseUrl+'webapps')
+        source = requests.get(baseUrl+'webapps',headers=headers)
     elif type == 'rce':
-        source = s.get(baseUrl+'remote')
+        source = requests.get(baseUrl+'remote',headers=headers)
     elif type == 'local':
-        source = s.get(baseUrl+'local')
+        source = requests.get(baseUrl+'local',headers=headers)
     elif type == 'dos':
-        source = s.get(baseUrl+'dos')
-
-    #print web.text
+        source = requests.get(baseUrl+'dos',headers=headers)
 
     # parser html
     soup = BeautifulSoup(source.text,"html.parser")
@@ -77,10 +73,10 @@ def get_vuls(date,type):
 
 
 def main(argv):
-   date = ''
-   type = ''
+   d = ''
+   t = ''
    try:
-      opts,args = getopt.getopt(argv,"hd:t:")
+      opts,args = getopt.getopt(argv[1:],'hd:t:')
       #print len(opts)
    except getopt.GetoptError:
       print '''
@@ -100,8 +96,8 @@ def main(argv):
 
             '''
       sys.exit(2)
-   for opt, arg in opts:
-      if opt == '-h':
+   for o, a in opts:
+      if o in('-h','--help','-help'):
          print '''
             Usage: python 0daySpider_expdb.py -d <date> -t <type>
 
@@ -118,15 +114,15 @@ def main(argv):
             Remind again:Please don't set date too earily,because I just request one page vuls!!
 
             '''
-         sys.exit()
-      elif opt == '-d':
-         date = arg
-      elif opt == '-t':
-         type = arg
-   if date == '' or date == '-t' or date == '-d':
-       date = str(time.strftime("%Y-%m-%d", time.localtime()))
+         sys.exit(2)
+      elif o in('-d','-date','--date'):
+         d = a
+      elif o in('-t','-type','--type'):
+         t = a
+   if d == '':
+       d = str(time.strftime("%Y-%m-%d", time.localtime()))
        print '\nuse default date:today'
-   get_vuls(date,type)
+   get_vuls(d,t)
 
 if __name__ == "__main__":
     #print sys.argv[1:]
