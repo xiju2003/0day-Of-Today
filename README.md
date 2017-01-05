@@ -19,7 +19,7 @@
                                    扫码关注ProjectKob公众号，即刻构筑企业安全防线😉
 
 <div align=center>
-<img src="https://github.com/We5ter/0day-Of-Today/blob/master/demo_pics/qrcode_for_gh_ada8f4239586_258.jpg" width="240px" align="center">
+<img src="https://github.com/We5ter/0day-Of-Today/blob/master/demo/qrcode_for_gh_ada8f4239586_258.jpg" width="240px" align="center">
 </div>
 
 
