@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 import sys, getopt
 from termcolor import colored
 import time
+import argparse
 
 
 def get_vuls(date,type):
@@ -19,17 +20,20 @@ def get_vuls(date,type):
                'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.95 Safari/537.36'
     }
    
-    baseUrl ='https://www.exploit-db.com/'
+    urls = {
+            'web': 'https://www.exploit-db.com/webapps',
+            'rce': 'https://www.exploit-db.com/remote',
+            'local': 'https://www.exploit-db.com/local',
+           'dos':'https://www.exploit-db.com/dos'
+         }
 
-    if type == 'web':
-        source = requests.get(baseUrl+'webapps',headers=headers)
-    elif type == 'rce':
-        source = requests.get(baseUrl+'remote',headers=headers)
-    elif type == 'local':
-        source = requests.get(baseUrl+'local',headers=headers)
-    elif type == 'dos':
-        source = requests.get(baseUrl+'dos',headers=headers)
-
+    baseUrl = urls.get(type)
+    if baseUrl == None:
+        baseUrl = 'https://www.exploit-db.com/webapps'
+        print 'use default type:web'
+    #print baseUrl
+    source = requests.get(baseUrl,headers=headers)
+  
     # parser html
     soup = BeautifulSoup(source.text,"html.parser")
 
@@ -72,78 +76,33 @@ def get_vuls(date,type):
         print 'Aha,I have found '+colored(str(count),'red')+' vul for your search conditionals'
 
 
-def main(argv):
-   d = ''
-   t = ''
-   try:
-      opts,args = getopt.getopt(argv[1:],'hd:t:')
-      #print len(opts)
-   except getopt.GetoptError:
-      print '''
-            Usage: python 0daySpider_expdb.py -d <date> -t <type>
+def main():
+   today = str(time.strftime("%Y-%m-%d", time.localtime()))
+   parser = argparse.ArgumentParser()
+   parser.add_argument('-d',"-date","--date",
+                       help="date fomat example:2016-12-29,Default(empty) is today,But not more than 7 days ago！！！",
+                        action = 'store',
+                        dest ='date',
+                        default =today,
+                         type=str)
+   parser.add_argument('-t',"-type","--type",
+                       help = '''
+                       type format (default web):
+                            web => Web Application Exploits;
+                            rce => Remote Code Execution Exploits;
+                            local => Local and Privilege Escalation Exploits;
+                            dos => Denial of Service and PoC Exploits
+                              ''',
+                        action = 'store',
+                        dest ='type',
+                        default="web",
+                        type=str) 
 
-            date fomat example:2016-12-29,Default(empty) is today,But not more than 7 days ago！！！
-
-            type format (default web):
-            web => Web Application Exploits;
-            rce => Remote Code Execution Exploits;
-            local => Local and Privilege Escalation Exploits;
-            dos => Denial of Service and PoC Exploits
-
-            example command: python 0daySpider_expdb.py -d 2016-12-29 -t web
-
-            Remind again:Please don't set date too earily,because I just request one page vuls!!
-
-            '''
-      sys.exit(2)
-   for o, a in opts:
-      if o in('-h','--help','-help'):
-         print '''
-            Usage: python 0daySpider_expdb.py -d <date> -t <type>
-
-            date fomat example:2016-12-29,Default(empty) is today,But not more than 7 days ago！！！
-
-            type format:
-            web => Web Application Exploits;
-            rce => Remote Code Execution Exploits;
-            local => Local and Privilege Escalation Exploits;
-            dos => Denial of Service and PoC Exploits
-
-            example command: python 0daySpider_expdb.py -d 2016-12-29 -t web
-
-            Remind again:Please don't set date too earily,because I just request one page vuls!!
-
-            '''
-         sys.exit(2)
-      elif o in('-d','-date','--date'):
-         d = a
-      elif o in('-t','-type','--type'):
-         t = a
-   if d == '':
-       d = str(time.strftime("%Y-%m-%d", time.localtime()))
-       print '\nuse default date:today'
+   args = parser.parse_args()
+   d = args.date
+   t = args.type     
    get_vuls(d,t)
 
 if __name__ == "__main__":
-    #print sys.argv[1:]
-    if len(sys.argv[1:]) < 2 :
-      print '''
-            Usage: python 0daySpider_expdb.py -d <date> -t <type>
-
-            date fomat example:2016-12-29,Default(empty) is today,But not more than 7 days ago！！！
-
-            type format (default web):
-            web => Web Application Exploits;
-            rce => Remote Code Execution Exploits;
-            local => Local and Privilege Escalation Exploits;
-            dos => Denial of Service and PoC Exploits
-
-            example command: python 0daySpider_expdb.py -d 2016-12-29 -t web
-
-            Remind again:Please don't set date too earily,because I just request one page vuls!!
-
-            '''
-      sys.exit(2)
-    else:
-        main(sys.argv[1:])
+    main()
 
