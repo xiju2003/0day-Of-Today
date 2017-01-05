@@ -2,14 +2,15 @@
 
 ###项目简介
 
-- 我们深知企业存在无法及时获知当前所有与企业服务通用组件相关的漏洞信息，而不得不大量依靠外部安全漏洞报告，因此订阅号ProjectKob应运而生
+- 我们深知企业存在无法及时获知完整的通用组件漏洞信息，而不得不大量依靠外部安全漏洞报告的窘迫状况，因此订阅号ProjectKob应运而生
 
 - ProjectKob是一个每日推送当天0day漏洞信息的订阅号，包括web、终端、威胁情报等
 
 ###目录介绍
-- 0daySpider目录为爬虫列表，负责抓取每日各个平台的0day信息，介绍参见https://github.com/We5ter/0day-Of-Today/blob/master/0daySpider/README.md
 
-- demo_pics/ README.md的示例图片目录，无用
+- /0daySpider目录为爬虫列表，负责抓取每日各个平台的0day信息，介绍参见https://github.com/We5ter/0day-Of-Today/blob/master/0daySpider/README.md
+
+- demo/ README.md的示例图片目录，无用
 
 - message_bak/ 每日推送信息的备份目录
 
