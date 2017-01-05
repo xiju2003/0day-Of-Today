@@ -8,7 +8,7 @@
 
 ###目录介绍
 
-- /0daySpider目录为爬虫列表，负责抓取每日各个平台的0day信息，介绍参见https://github.com/We5ter/0day-Of-Today/blob/master/0daySpider/README.md
+- 0daySpider/ 爬虫列表，负责抓取每日各个平台的0day信息，介绍参见https://github.com/We5ter/0day-Of-Today/blob/master/0daySpider/README.md
 
 - demo/ README.md的示例图片目录，无用
 
